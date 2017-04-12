@@ -1,31 +1,5 @@
-%\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/outer/beamerouterthemeinfolines.sty,v 1.8 2004/10/14 09:48:48 tantau Exp $
-
-
-% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
-%
-% This program can be redistributed and/or modified under the terms
-% of the GNU Public License, version 2.
-
-% ICare Beamer Package
-% Author: Vachaudez Julien
-% URL: www.cerisic.be
-%
-% Usage: \usepackage{CerisicBeamer}
-% Modifies titlepage to imitate Cerisic-Slide-Cover.
-% Required Input:
-%  Type of your thesis (Assigment, Master's, Ph.D. ... ) by \doctype{yourtype}
-%  Title of your thesis by \title{yourtitle}
-%   CAUTION: Very long titles (4 lines) may result in a pagebreak. 
-%    Either use a shorter title or decrease the fontsize
-%  Author of the thesis by \author{yourname}
-%  Date of submission by \date{\today}
-%  Names of Supervisors by \tutor{1st Supervisor}
-%
-%
-% This program can be redistributed and/or modified under the terms
-% of the GNU Public License, version 2.
-%
-%	 See comments in the stylesheet to adjust the template to your needs
+\NeedsTeXFormat{LaTeX2e}[1999/01/01]
+\ProvidesPackage{CERISICBeamer}[2017/03/12 v0.1]
 
 
 
@@ -202,6 +176,22 @@
   \@latex@warning@no@line{Package `CerisicBeamer': No \noexpand\date given}}
 
 
+\newcommand{\fundingsponsor}[2]{
+  \def\@fundingsponsorsize{#1}
+  \def\@fundingsponsorimage{#2}
+  }
+
+\newcommand{\industrialpartner}[2]{
+  \def\@industrialpartnersize{#1}
+  \def\@industrialpartnerimage{#2}
+  }
+
+\newcommand{\scientificpartner}[2]{
+  \def\@scientificpartnersize{#1}
+  \def\@scientificpartnerimage{#2}
+  }
+
+
 \setbeamertemplate{footline}
 {
 \vspace{0.2cm}
@@ -213,7 +203,7 @@
 \renewcommand{\maketitle}
 {
 % Définition de l'image de fond pour le slide de garde
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{Images/CerisicTitleSlide.png}}
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicTitleSlide.png}}
 
 \begin{frame}[plain]
 	\vspace{\@EspaceUn}
@@ -255,7 +245,7 @@
 	\vspace*{\@EspaceQuatre}
 	\begin{minipage}{0.32\textwidth}
 		\begin{flushleft}
-			\includegraphics[height=0.125\paperheight]{Images/Wallonie.jpg}	
+			\includegraphics[width=\@fundingsponsorsize]{\@fundingsponsorimage}
 		\end{flushleft}
 		\vspace*{0.3cm}
 	\end{minipage}
@@ -266,15 +256,15 @@
 	\end{minipage}
 	\begin{minipage}{0.32\textwidth}
 		\begin{flushright}
-			\includegraphics[height=0.08\paperheight]{Images/ULBLogo.jpg}
-			\includegraphics[height=0.08\paperheight]{Images/Logo-ICare.png}	
+			\includegraphics[width=\@scientificpartnersize]{\@scientificpartnerimage}
+			\includegraphics[width=\@industrialpartnersize]{\@industrialpartnerimage}	
 		\end{flushright}
 		\vspace*{0.3cm}
 	\end{minipage}
 \end{frame}
 
 %Définition du fond pour les slides normaux
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{Images/CerisicSlide.png}}
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicSlide.png}}
 
 
 %Affichage du numéro du slide
@@ -316,7 +306,7 @@
 \newcommand{\finalslide}[0]
 {
 % Définition de l'image de fond pour le slide de garde
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{Images/ICareFinalSlide.png}}
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/ICareFinalSlide.png}}
 
 %Affichage du numéro du slide
 \setlength{\Decalage}{0.25cm}
