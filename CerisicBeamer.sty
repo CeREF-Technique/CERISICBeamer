@@ -1,17 +1,54 @@
+%----------------------
+% General Informations
+%----------------------
 \NeedsTeXFormat{LaTeX2e}[1999/01/01]
-\ProvidesPackage{CERISICBeamer}[2017/03/12 v0.1]
+\ProvidesPackage{CERISICBeamer}[2017/05/03 v0.2]
 
 
 
 \mode<presentation>
 
+%-------------------
+% Required Packages
+%-------------------
+\RequirePackage{ifthen}
+\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{graphicx}
+\RequirePackage{multicol}
+\RequirePackage{color}
 
-\usepackage{graphicx}
-\usepackage{color}
 
 
+%---------------------
+% Options Declaration
+%---------------------
+\newif\if@scientificpartner \@scientificpartnerfalse
+\DeclareOption{scientificpartner}{\@scientificpartnertrue}
 
-%Définition des thèmes généraux
+\newif\if@industrialpartner \@industrialpartnerfalse
+\DeclareOption{industrialpartner}{\@industrialpartnertrue}
+
+\newif\if@english \@englishfalse
+\DeclareOption{english}{\@englishtrue}
+
+\if@scientificpartner
+\newcommand{\scientificpartner}[1]{
+  \def\@scientificpartnerimage{#1}
+  }
+\fi
+
+\if@industrialpartner
+\newcommand{\industrialpartner}[1]{
+  \def\@industrialpartnerimage{#1}
+  }
+\fi
+
+
+%\DeclareStringOption [<init>]{<key>}[<default>]
+
+%---------------
+% General Theme
+%---------------
 \usefonttheme{professionalfonts}
 %\usefonttheme{serif}
 \usecolortheme{orchid}
@@ -305,10 +342,9 @@
 
 \newcommand{\finalslide}[0]
 {
-% Définition de l'image de fond pour le slide de garde
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/ICareFinalSlide.png}}
-
-%Affichage du numéro du slide
+% Template for final slide
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicSlide.png}}
+% Slide number
 \setlength{\Decalage}{0.25cm}
 \setbeamertemplate{footline}
 {
@@ -323,6 +359,9 @@
 }
 
 \begin{frame}
+% \begin{center}
+% Merci pour votre attention
+% \end{center}
 \end{frame}
 }
 
@@ -336,6 +375,25 @@
 %\setbeamerfont{section in toc}{family=\rmfamily}
 %\setbeamerfont{subsection in toc}{family=\rmfamily}
 
+
+
+%------------------
+% Hooks Definition
+%------------------
+
+\AtBeginPart{
+	\begin{frame}
+ 	\begin{center}
+	\begin{LARGE}
+% 	{\rm \textbf{Partie \insertpartnumber}}\\
+ 	\textbf{Part \insertpartnumber}\\
+	\vspace{10pt}
+ 	\textbf{\insertpart}
+% 	{\rm \textbf{\insertpart}}
+	\end{LARGE}
+ 	\end{center}
+	\end{frame}
+}
 
 \AtBeginSection{
    \begin{frame}
@@ -361,19 +419,7 @@
 %    \end{frame}
 % }
 
-\AtBeginPart{
-	\begin{frame}
- 	\begin{center}
-	\begin{LARGE}
-% 	{\rm \textbf{Partie \insertpartnumber}}\\
- 	\textbf{Part \insertpartnumber}\\
-	\vspace{10pt}
- 	\textbf{\insertpart}
-% 	{\rm \textbf{\insertpart}}
-	\end{LARGE}
- 	\end{center}
-	\end{frame}
-}
+
 
 \mode
 <all>
