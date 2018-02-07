@@ -1,0 +1,17 @@
+# Extracted Database Files #
+############################
+*.txt
+
+# LaTeX Generated files #
+#########################
+*.aux
+*.nav
+*.log
+*.out
+*.snm
+*.syntecx.gz
+*.toc
+
+# GIMP Project file #
+#####################
+*.xcf
