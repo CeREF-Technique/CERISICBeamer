@@ -39,20 +39,6 @@
 \newcommand{\tf@titlealign}{flushright}
 \define@key{tf}{titlealign}{\renewcommand{\tf@titlealign}{#1}}
 
-
-\newcommand{\tf@top}{2.5cm}
-\define@key{tf}{top}{\renewcommand{\tf@top}{#1}}
-
-\newcommand{\tf@between}{0cm}
-\define@key{tf}{between}{\renewcommand{\tf@between}{#1}}
-
-\newcommand{\tf@bottom}{0cm}
-\define@key{tf}{bottom}{\renewcommand{\tf@bottom}{#1}}
-
-\newcommand{\tf@inter}{0.5cm}
-\define@key{tf}{inter}{\renewcommand{\tf@inter}{#1}}
-
-
 \define@key{tf}{industrialpartner}{\def\tf@industrialpartner{#1}}
 \define@key{tf}{scientificpartner}{\def\tf@scientificpartner{#1}}
 \define@key{tf}{fundingsponsor}{\def\tf@fundingsponsor{#1}}
@@ -62,6 +48,19 @@
 \define@key{tf}{authortitle}{\def\tf@authortitle{#1}}
 \define@key{tf}{tutor}{\def\tf@tutor{#1}}
 \define@key{tf}{tutortitle}{\def\tf@tutortitle{#1}}
+
+
+\newlength{\tf@top}
+\newlength{\tf@bottom}
+\newlength{\tf@between}
+\newlength{\tf@inter}
+
+\setlength{\tf@top}{2.5cm plus 1cm minus 0.5cm}
+\setlength{\tf@bottom}{0.5cm plus 0.5cm minus 0cm}
+\setlength{\tf@between}{0.5cm plus 2cm minus 2cm}
+\setlength{\tf@inter}{0cm plus 0.5cm minus 0.5cm}
+
+
 
 
 \newcommand{\titleframe}[1][]{%
@@ -79,14 +78,14 @@
 	\begin{center}
 		\begin{minipage}{0.33\textwidth}
 			\begin{flushleft}
-				\tf@tutortitle\\
-				\tf@tutor\\
+				\ifthenelse{\isundefined{\tf@tutortitle}}{}{\tf@tutortitle\\}
+				\ifthenelse{\isundefined{\tf@tutor}}{}{\tf@tutor\\}
 			\end{flushleft}
 		\end{minipage}
 	\hspace{\tf@between}
 		\begin{minipage}{0.33\textwidth}
 			\begin{flushright}
-				\tf@authortitle\\
+				\ifthenelse{\isundefined{\tf@authortitle}}{}{\tf@authortitle\\}
 				\tf@author
 			\end{flushright}
 		\end{minipage}
@@ -94,36 +93,49 @@
 	
 	\vspace*{\tf@bottom}
 	
-	\begin{minipage}{0.32\textwidth}
+	\begin{minipage}{0.49\textwidth}
 		\begin{center}
 			\ifthenelse{\isundefined{\tf@fundingsponsor}}{
-				\ifthenelse{\isundefined{\tf@scienticpartner}}{
+			%fundingsponsor is undefined
+				\ifthenelse{\isundefined{\tf@scientificpartner}}{
+				%scientificpartner is undefined
 				}
-				%else
 				{
-					\tf@scienticpartner
+					\tf@scientificpartner
 				}
 			}
-			%else
 			{
 				\tf@fundingsponsor
 			}
 		\end{center}
-		\vspace*{0.3cm}
 	\end{minipage}
-	\begin{minipage}{0.32\textwidth}
+	\begin{minipage}{0.49\textwidth}
 		\begin{center}
-			\ifthenelse{\isundefined{\tf@date}}{}{\tf@date}
+			\ifthenelse{\isundefined{\tf@fundingsponsor}}{
+				\ifthenelse{\isundefined{\tf@industrialpartner}}{
+				}
+				%else
+				{
+					\tf@industrialpartner
+				}
+			}
+			%else
+			{
+				\ifthenelse{\isundefined{\tf@scientificpartner}}{\tf@industrialpartner
+				}
+				%else
+				{
+					\tf@scientificpartner
+					\tf@industrialpartner
+				}
+			}
 		\end{center}
 	\end{minipage}
-	\begin{minipage}{0.32\textwidth}
-		\begin{center}
-			%\ifthenelse{\isundefined{}}{}{}
-			\tf@scientificpartner
-			\tf@industrialpartner
-		\end{center}
-		\vspace*{0.3cm}
-	\end{minipage}
+	\vfill
+	\begin{center}
+		\tf@date
+	\end{center}
+	\vspace*{0.6cm}
 \end{frame}
 
 
@@ -133,26 +145,39 @@
 % Display slide number
 \newlength{\offset}
 \setlength{\offset}{0.25cm}
+
 \setbeamertemplate{footline}
 {
-	\hspace{\offset}
-	\begin{minipage}{0.0625\paperwidth}
-		\begin{center}
-			\large{\textcolor{white}{\textbf{\insertframenumber}}}
-		\end{center}
-	\end{minipage}
-\vspace{0.3cm}
+	\leavevmode%
+	\hbox{
+	\begin{beamercolorbox}[wd=.15\paperwidth,ht=0ex,dp=5ex,center]{date in head/foot}
+		\large{\textcolor{white}{\textbf{\insertframenumber}}}%\insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+	\end{beamercolorbox}
+	\vspace*{0.5cm}
+	}
 }
 }
 
 
-\newcommand{\finalframe}{%
+
+
+%------------------------
+% Final Frame Definition
+%------------------------
+
+\newcommand{\ff@text}{None}
+\define@key{ff}{text}{\renewcommand{\ff@text}{#1}}
+
+
+\newcommand{\finalframe}[1][]{%
 \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicSlide.png}}
-
+\setkeys{ff}{#1}
 \begin{frame}
 	\begin{center}
-		\ifthenelse{\equal{\@lang}{french}}{Merci de votre attention}{}
-		\ifthenelse{\equal{\@lang}{english}}{Thank you for your attention}{}
+		\ifthenelse{\equal{\ff@text}{None}}{
+			\ifthenelse{\equal{\@lang}{french}}{Merci de votre attention}{}
+			\ifthenelse{\equal{\@lang}{english}}{Thank you for your attention}{}
+		}{\ff@text}
 	\end{center}
 \end{frame}
 }
@@ -188,8 +213,22 @@
 %\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
 %\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
 }}{}
-
 \ifthenelse{\equal{\set@hook}{AtBeginSection}}{
+\AtBeginPart{
+\begin{frame}
+	\begin{center}
+		\begin{LARGE}
+			\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
+			\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
+			\vspace{10pt}
+			\textbf{\insertpart}
+		\end{LARGE}
+	\end{center}
+\end{frame}
+%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
+%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
+%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
+}
 \AtBeginSection{
 	\begin{frame}
 		\frametitle{\@tocname}
@@ -197,8 +236,29 @@
 				,subsectionstyle=shaded/shaded/shaded]
 	\end{frame}
 }}{}
-
 \ifthenelse{\equal{\set@hook}{AtBeginSubSection}}{
+\AtBeginPart{
+\begin{frame}
+	\begin{center}
+		\begin{LARGE}
+			\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
+			\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
+			\vspace{10pt}
+			\textbf{\insertpart}
+		\end{LARGE}
+	\end{center}
+\end{frame}
+%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
+%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
+%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
+}
+\AtBeginSection{
+	\begin{frame}
+		\frametitle{\@tocname}
+			\tableofcontents[sectionstyle=show/shaded%
+				,subsectionstyle=shaded/shaded/shaded]
+	\end{frame}
+}
 \AtBeginSubsection{
 	\begin{frame}
 		\frametitle{\@tocname}
@@ -206,7 +266,6 @@
 				,subsectionstyle=show/shaded/shaded]
 	\end{frame}
 }}{}
-
 }
 
 
