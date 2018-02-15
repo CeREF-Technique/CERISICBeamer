@@ -2,7 +2,7 @@
 % General Informations
 %----------------------
 \NeedsTeXFormat{LaTeX2e}[1999/01/01]
-\ProvidesClass{CERISICBeamer}[2018/02/06 v0.3]
+\ProvidesClass{CERISICBeamer}[2018/02/15 v0.4]
 
 
 %-----------------
