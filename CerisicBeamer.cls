@@ -20,6 +20,12 @@
 \RequirePackage{graphicx}
 \RequirePackage{color}
 
+%-------------------
+% Color definition
+%-------------------
+\definecolor{white}{rgb}{1 1 1}
+\definecolor{VertBleu}{rgb}{0.055 0.596 0.576}
+
 %\RequirePackage[absolute,overlay]{textpos}
 %\RequirePackage{multicol}
 
@@ -30,6 +36,129 @@
 \newcommand{\@lang}{french}
 \DeclareOption{french}{\renewcommand{\@lang}{french}}
 \DeclareOption{english}{\renewcommand{\@lang}{english}}
+
+
+
+
+%------------------
+% Hooks Definition
+%------------------
+
+\newcommand{\set@hook}{None}
+\define@key{set}{hook}{\renewcommand{\set@hook}{#1}}
+
+
+%\newcommand{\set@tocname}{Sommaire}
+\define@key{set}{tocname}{\def\set@tocname{#1}}
+%\define@key{set}{tocname}{\renewcommand{\set@tocname}{#1}}
+
+\define@key{set}{timeduration}{\def\set@timeduration{#1}}
+
+\newcommand{\set@timeinterval}{10}
+\define@key{set}{timeinterval}{\renewcommand{\set@timeinterval}{#1}}
+
+\newcommand{\set@timewarningfirst}{80}
+\define@key{set}{timewarningfirst}{\renewcommand{\set@timewarningfirst}{#1}}
+
+\newcommand{\set@timewarningsecond}{95}
+\define@key{set}{timewarningsecond}{\renewcommand{\set@timewarningsecond}{#1}}
+
+\newcommand{\set@resetatpages}{2}
+\define@key{set}{resetatpages}{\renewcommand{\set@resetatpages}{#1}}
+
+\newcommand{\set@timedeath}{0}
+\define@key{set}{timedeath}{\renewcommand{\set@timedeath}{#1}}
+
+\define@key{set}{innertheme}{\def\set@inner{#1}}
+\define@key{set}{outtertheme}{\def\set@outter{#1}}
+\define@key{set}{colortheme}{\def\set@color{#1}}
+
+
+
+
+\newcommand{\setup}[1][]{%
+\setkeys{set}{#1}
+
+\ifthenelse{\isundefined{\set@timeduration}}{}{\PassOptionsToPackage{font=Times,timeinterval=\set@timeinterval, timeduration=\set@timeduration, timedeath=\set@timedeath, fillcolorwarningsecond=white!60!yellow, timewarningfirst=\set@timewarningfirst,timewarningsecond=\set@timewarningsecond,resetatpages=\set@resetatpages}{tdclock}}
+\ifthenelse{\isundefined{\set@timeduration}}{}{\RequirePackage{tdclock}}
+
+\ifthenelse{\isundefined{\set@tocname}}{
+	\ifthenelse{\equal{\@lang}{french}}{\newcommand{\set@tocname}{Sommaire}}{}
+	\ifthenelse{\equal{\@lang}{english}}{\newcommand{\set@tocname}{Outline}}{}
+}{}
+
+
+%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
+%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
+%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
+
+\ifthenelse{\equal{\set@hook}{AtBeginPart}}{
+\AtBeginPart{
+	\begin{frame}
+		\frametitle{\set@tocname}
+		\begin{center}
+			\begin{LARGE}
+				\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
+				\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
+				\vspace{10pt}
+				\textbf{\insertpart}
+			\end{LARGE}
+		\end{center}
+	\end{frame}
+}}{}
+\ifthenelse{\equal{\set@hook}{AtBeginSection}}{
+\AtBeginPart{
+	\begin{frame}
+		\frametitle{\set@tocname}
+		\begin{center}
+			\begin{LARGE}
+				\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
+				\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
+				\vspace{10pt}
+				\textbf{\insertpart}
+			\end{LARGE}
+		\end{center}
+	\end{frame}
+}
+\AtBeginSection{
+	\begin{frame}
+	\frametitle{\set@tocname}
+			\tableofcontents[sectionstyle=show/shaded%
+				,subsectionstyle=shaded/shaded/shaded]
+	\end{frame}
+}}{}
+\ifthenelse{\equal{\set@hook}{AtBeginSubSection}}{
+\AtBeginPart{
+	\begin{frame}
+	\frametitle{\set@tocname}
+		\begin{center}
+			\begin{LARGE}
+				\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
+				\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
+				\vspace{10pt}
+				\textbf{\insertpart}
+			\end{LARGE}
+		\end{center}
+	\end{frame}
+}
+\AtBeginSection{
+	\begin{frame}
+		\frametitle{\set@tocname}
+			\tableofcontents[sectionstyle=show/shaded%
+				,subsectionstyle=shaded/shaded/shaded]
+	\end{frame}
+}
+\AtBeginSubsection{
+	\begin{frame}
+		\frametitle{\set@tocname}
+			\tableofcontents[sectionstyle=show/shaded%
+				,subsectionstyle=show/shaded/shaded]
+	\end{frame}
+}}{}
+}
+
+
+
 
 
 \define@key{tf}{title}{\def\tf@title{#1}}
@@ -67,6 +196,7 @@
 \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicTitleSlide.png}}
 \setkeys{tf}{#1}
 \begin{frame}[plain]
+	\ifthenelse{\isundefined{\set@timeduration}}{}{\initclock}
 	\vspace*{\tf@top}
 	\begin{\tf@titlealign}
 		\tf@title\\
@@ -142,16 +272,18 @@
 % Display new background image
 \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{img/CerisicSlide.png}}
 
-% Display slide number
-\newlength{\offset}
-\setlength{\offset}{0.25cm}
-
+% Display slide number and clock
 \setbeamertemplate{footline}
 {
 	\leavevmode%
 	\hbox{
 	\begin{beamercolorbox}[wd=.15\paperwidth,ht=0ex,dp=5ex,center]{date in head/foot}
 		\large{\textcolor{white}{\textbf{\insertframenumber}}}%\insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+	\end{beamercolorbox}
+	\begin{beamercolorbox}[wd=.7\paperwidth,ht=0ex,dp=5ex,center]{date in head/foot}
+	\end{beamercolorbox}
+	\begin{beamercolorbox}[wd=.15\paperwidth,ht=0ex,dp=5ex,center]{date in head/foot}
+		\ifthenelse{\isundefined{\set@timeduration}}{}{\tiny\color{white}\bfseries\crono}
 	\end{beamercolorbox}
 	\vspace*{0.5cm}
 	}
@@ -182,91 +314,6 @@
 \end{frame}
 }
 
-
-
-%------------------
-% Hooks Definition
-%------------------
-
-\newcommand{\set@hook}{None}
-\define@key{set}{hook}{\renewcommand{\set@hook}{#1}}
-\define@key{set}{innertheme}{\def\set@inner{#1}}
-\define@key{set}{outtertheme}{\def\set@outter{#1}}
-\define@key{set}{colortheme}{\def\set@color{#1}}
-
-
-\newcommand{\setup}[1][]{%
-\setkeys{set}{#1}
-\ifthenelse{\equal{\set@hook}{AtBeginPart}}{
-\AtBeginPart{
-\begin{frame}
-	\begin{center}
-		\begin{LARGE}
-			\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
-			\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
-			\vspace{10pt}
-			\textbf{\insertpart}
-		\end{LARGE}
-	\end{center}
-\end{frame}
-%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
-%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
-%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
-}}{}
-\ifthenelse{\equal{\set@hook}{AtBeginSection}}{
-\AtBeginPart{
-\begin{frame}
-	\begin{center}
-		\begin{LARGE}
-			\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
-			\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
-			\vspace{10pt}
-			\textbf{\insertpart}
-		\end{LARGE}
-	\end{center}
-\end{frame}
-%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
-%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
-%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
-}
-\AtBeginSection{
-	\begin{frame}
-		\frametitle{\@tocname}
-			\tableofcontents[sectionstyle=show/shaded%
-				,subsectionstyle=shaded/shaded/shaded]
-	\end{frame}
-}}{}
-\ifthenelse{\equal{\set@hook}{AtBeginSubSection}}{
-\AtBeginPart{
-\begin{frame}
-	\begin{center}
-		\begin{LARGE}
-			\ifthenelse{\equal{\@lang}{french}}{\textbf{Partie \insertpartnumber}\\}{}
-			\ifthenelse{\equal{\@lang}{english}}{\textbf{Part \insertpartnumber}\\}{}
-			\vspace{10pt}
-			\textbf{\insertpart}
-		\end{LARGE}
-	\end{center}
-\end{frame}
-%\ifthenelse{\isundefined{\set@inner}}{}{\useinnertheme{\set@inner}}
-%\ifthenelse{\isundefined{\set@outter}}{}{\useouttertheme{\set@outter}}
-%\ifthenelse{\isundefined{\set@color}}{}{\usecolortheme{\set@color}}
-}
-\AtBeginSection{
-	\begin{frame}
-		\frametitle{\@tocname}
-			\tableofcontents[sectionstyle=show/shaded%
-				,subsectionstyle=shaded/shaded/shaded]
-	\end{frame}
-}
-\AtBeginSubsection{
-	\begin{frame}
-		\frametitle{\@tocname}
-			\tableofcontents[sectionstyle=show/shaded%
-				,subsectionstyle=show/shaded/shaded]
-	\end{frame}
-}}{}
-}
 
 
 \ProcessOptions\relax
@@ -306,10 +353,6 @@
 %---------------
 % General Theme
 %---------------
-% Color definition
-\definecolor{white}{rgb}{1 1 1}
-\definecolor{VertBleu}{rgb}{0.055 0.596 0.576}
-
 \usefonttheme{professionalfonts}
 \usecolortheme{orchid}
 \useoutertheme{default}
