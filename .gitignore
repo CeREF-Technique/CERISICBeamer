@@ -4,14 +4,14 @@
 
 # LaTeX Generated files #
 #########################
+*.toc
 *.aux
 *.nav
-*.log
-*.out
-*.snm
-*.syntecx.gz
+*.synctex.gz
 *.toc
+*.log
 
 # GIMP Project file #
 #####################
 *.xcf
+

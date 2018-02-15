@@ -4,7 +4,10 @@
 \usepackage{lmodern}
 \usepackage[utf8]{inputenc}
 
-\setup[hook=AtBeginPart]
+\setup[hook=AtBeginSection,
+	   %tocname={},
+	   timeduration=10,
+	   timeinterval=1]
 
 \begin{document}
 
@@ -19,23 +22,18 @@ scientificpartner = {\includegraphics[height=0.25\textwidth]{./img/CERISIC_logo.
 industrialpartner = {\includegraphics[height=0.25\textwidth]{./img/CERISIC_logo.png}},
 fundingsponsor = {\includegraphics[height=0.25\textwidth]{./img/CERISIC_logo.png}},
 tutortitle = {\textbf{Promoter:}},
-tutor = {John Doe\\John Doe},
+tutor = {John Doe},
 authortitle = {\textbf{Author:}},
 author = {John Doe\\~},
 date=\today]
 
-
-\finalframe
-
-\finalframe[text={Questions?}]
 
 \part{Introduction}
 \section{First section}
 \section{Second section}
 
 \begin{frame}
-\frametitle{Outline}
-%\initclock
+%\frametitle{Outline}
 	 \begin{itemize}
 		 \item[]\textbf{{\large Part 1: Context}}
 		 \item[]
@@ -44,12 +42,12 @@ date=\today]
 		 \item[]\textbf{{\large Part 3: Test Bench}}
 		 \item[]
 		 \item[]\textbf{{\large Part 4: Data Manipulation \& Visualization}}
-		 \item[]
-		 \item[]\textbf{{\large Part 5: Imbalance Detection - A Machine Learning Example}}
-		 \item[]
-		 \item[]\textbf{{\large Part 6: Software licences}}
 	\end{itemize}
 \end{frame}
 
+
+\finalframe
+
+\finalframe[text={Questions?}]
 
 \end{document}
