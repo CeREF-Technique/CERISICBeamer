@@ -1,4 +1,4 @@
-# CerisicBeamer
+# CERISICBeamer
 This template provides a class definition, to create a beamer presentation with the CERISIC layout. It also provides high level options to easily configure your presentation.
 
 ## Getting Started
